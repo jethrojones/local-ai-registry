@@ -1,0 +1,88 @@
+{
+  "accepted_at": null,
+  "id": "qwen3-8-27b-ud-q4-k-xl-rtx-3060-12gb-llama-cpp-tp2-tensor-mtp-128k-sweep",
+  "measured_at": "2026-09-29",
+  "metrics": {
+    "base_memory_bytes": null,
+    "base_memory_context_tokens": null,
+    "concurrency": 1,
+    "decode32k_context_tokens": null,
+    "decode32k_tps": null,
+    "decode8k_context_tokens": null,
+    "decode8k_tps": null,
+    "decode_max_context_tokens": null,
+    "decode_max_context_tps": null,
+    "decode_mode": "MTP speculative decoding (3 draft tokens); greedy; median of 3 x 256-token generations; single stream",
+    "inference_engine_version": "llama.cpp v0.5.0 7fe450e19305b828c199d602c23a8337aaa1f03b",
+    "latest_point_at": "2026-09-29",
+    "max_context_tokens": 131072,
+    "max_prompt_tokens": 104941,
+    "memory8k_bytes": null,
+    "memory8k_context_tokens": null,
+    "memory_max_context_bytes": null,
+    "memory_max_context_tokens": null,
+    "peak_generation_tps": 48.8,
+    "peak_memory_bytes": 23944442675,
+    "peak_prompt_tps": 662.0,
+    "point_count": 2,
+    "ttft32k_cached_prompt_tokens": null,
+    "ttft32k_context_tokens": null,
+    "ttft32k_seconds": null
+  },
+  "recipe_id": "qwen3-8-27b-ud-q4-k-xl-rtx-3060-12gb-llama-cpp-tp2-tensor-mtp-128k",
+  "rows": [
+    {
+      "concurrency": 1,
+      "context_tokens": 80,
+      "decode_tok_s": 48.8,
+      "metric_note": "short coding prompt; 256 output tokens; decode tok/s is completion tokens / generation time",
+      "output_tokens": 256,
+      "peak_vram_gb": 22.3,
+      "prefill_tok_s": null,
+      "samples": 3,
+      "status": "measured",
+      "ttft_ms_p50": null
+    },
+    {
+      "concurrency": 1,
+      "context_tokens": 6072,
+      "decode_tok_s": null,
+      "metric_note": "cache-busted ~6k-token prompt; prefill = prompt tokens / TTFT",
+      "output_tokens": 1,
+      "peak_vram_gb": 22.3,
+      "prefill_tok_s": 662.0,
+      "samples": 1,
+      "status": "measured",
+      "ttft_ms_p50": null
+    },
+    {
+      "concurrency": 1,
+      "context_tokens": 104941,
+      "decode_tok_s": null,
+      "metric_note": "long-context recall at 104,941 prompt tokens: code found 3/3 with temp 1.0 / top-p 0.95 / top-k 20; ttft_ms_p50 is whole-request wall time including answer",
+      "output_tokens": null,
+      "peak_vram_gb": null,
+      "prefill_tok_s": null,
+      "samples": 3,
+      "status": "measured",
+      "ttft_ms_p50": 211000
+    }
+  ],
+  "schema_version": "local-ai-registry/v1",
+  "source": {
+    "commit": "b4a395bd05ee8c582e3318b7176081a70a7f95f4",
+    "kind": "submitter",
+    "methodology": "zbench.py against llama-server on localhost: decode = median of 3 greedy streaming generations of 256 tokens on a coding prompt (thinking on); prefill = one cache-busted ~6k-token prompt, prompt tokens / TTFT; peak VRAM sampled per GPU every 0.5 s. recall_check.py: 3 trials, code at 85% depth of a prompt filling ~80% of the window, 4,096-token cap.",
+    "paths": [
+      "data/sources/rtx3060x2-qwen38-27b/results/bench.md",
+      "data/sources/rtx3060x2-qwen38-27b/results/bench_dual.log",
+      "data/sources/rtx3060x2-qwen38-27b/results/recall.jsonl",
+      "data/sources/rtx3060x2-qwen38-27b/scripts/zbench.py",
+      "data/sources/rtx3060x2-qwen38-27b/scripts/recall_check.py",
+      "data/sources/rtx3060x2-qwen38-27b/scripts/run_llama.sh",
+      "data/sources/rtx3060x2-qwen38-27b/scripts/bench_dual.sh"
+    ],
+    "repository": "https://github.com/jethrojones/local-ai-registry",
+    "url": "https://github.com/jethrojones/local-ai-registry/blob/b4a395bd05ee8c582e3318b7176081a70a7f95f4/data/sources/rtx3060x2-qwen38-27b/README.md"
+  }
+}

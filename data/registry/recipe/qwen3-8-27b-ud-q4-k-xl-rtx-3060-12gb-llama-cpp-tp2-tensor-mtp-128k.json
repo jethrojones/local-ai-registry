@@ -1,0 +1,160 @@
+{
+  "capabilities": {
+    "chat": true,
+    "reasoning": true,
+    "tools": true,
+    "vision": false
+  },
+  "description": "Candidate bare-metal llama.cpp (v0.5.0, CUDA 13.3, sm_86) launch of Qwen3.8-27B UD-Q4_K_XL on 2x RTX 3060 12GB with tensor split 1:1, q4_0 KV cache and the GGUF's built-in MTP head (--spec-type draft-mtp, 3 draft tokens), at a 131,072-token window. Measured 48.8 tok/s decode and 662 tok/s prefill; tool call passed; a code planted at 85% depth of a 104,941-token prompt was recalled 3/3 with Qwen's recommended sampling. Compared with the reference 64k recipe for the same model and hardware, this doubles the window with a pinned, reproducible launch.",
+  "engine": {
+    "graph_mode": null,
+    "name": "llama.cpp",
+    "version": "v0.5.0 (7fe450e19305b828c199d602c23a8337aaa1f03b)"
+  },
+  "facts": {
+    "serving.kv_cache_tokens": {
+      "provenance": {
+        "captured_at": "2026-09-29T23:40:00Z",
+        "sources": [
+          {
+            "captured_at": "2026-09-29T23:40:00Z",
+            "commit": "b4a395bd05ee8c582e3318b7176081a70a7f95f4",
+            "kind": "submitter-evidence",
+            "repository": "https://github.com/jethrojones/local-ai-registry",
+            "url": "https://github.com/jethrojones/local-ai-registry/blob/b4a395bd05ee8c582e3318b7176081a70a7f95f4/data/sources/rtx3060x2-qwen38-27b/README.md"
+          }
+        ]
+      },
+      "reason": "not reported by the llama-server API for this launch; not independently measured",
+      "state": "unknown"
+    }
+  },
+  "hardware_count": 2,
+  "hardware_id": "rtx-3060-12gb",
+  "id": "qwen3-8-27b-ud-q4-k-xl-rtx-3060-12gb-llama-cpp-tp2-tensor-mtp-128k",
+  "launch": {
+    "accelerator_backend": "cuda",
+    "arguments": [
+      "-m",
+      "<path-to-gguf>",
+      "--host",
+      "127.0.0.1",
+      "--port",
+      "8080",
+      "-ngl",
+      "99",
+      "-fa",
+      "on",
+      "-np",
+      "1",
+      "--jinja",
+      "-c",
+      "131072",
+      "-sm",
+      "tensor",
+      "-ts",
+      "1,1",
+      "-ctk",
+      "q4_0",
+      "-ctv",
+      "q4_0",
+      "--spec-type",
+      "draft-mtp",
+      "--spec-draft-n-max",
+      "3",
+      "--temp",
+      "1.0",
+      "--top-p",
+      "0.95",
+      "--top-k",
+      "20",
+      "--min-p",
+      "0.0"
+    ],
+    "build": {
+      "cmake_flags": [
+        "-DGGML_CUDA=ON",
+        "-DCMAKE_CUDA_ARCHITECTURES=86",
+        "-DGGML_CUDA_NCCL=OFF",
+        "-DLLAMA_CURL=OFF",
+        "-DCMAKE_BUILD_TYPE=Release"
+      ],
+      "commit": "7fe450e19305b828c199d602c23a8337aaa1f03b",
+      "cuda_version": "13.3.1",
+      "note": "Stock upstream llama.cpp v0.5.0 built from source for sm_86; no patches.",
+      "release_tag": "v0.5.0",
+      "repository": "https://github.com/ggml-org/llama.cpp",
+      "sha256": "062c7720852678a52cdf3804c4dd32b38e37b43e4b2a472f6f32aecf2a17d5ee"
+    },
+    "container": {
+      "captured_at": "2026-09-29T23:40:00Z",
+      "compose_file": null,
+      "digest": null,
+      "image": null,
+      "reason": "bare-metal llama.cpp built from source; no container is used",
+      "runtime": null,
+      "source": [
+        {
+          "captured_at": "2026-09-29T23:40:00Z",
+          "commit": "b4a395bd05ee8c582e3318b7176081a70a7f95f4",
+          "kind": "submitter-launch",
+          "repository": "https://github.com/jethrojones/local-ai-registry",
+          "url": "https://github.com/jethrojones/local-ai-registry/blob/b4a395bd05ee8c582e3318b7176081a70a7f95f4/data/sources/rtx3060x2-qwen38-27b/config/llama-server-presets.ini"
+        }
+      ],
+      "state": "none"
+    },
+    "environment": {
+      "CUDA_DEVICE_ORDER": "PCI_BUS_ID",
+      "GGML_CUDA_ALLREDUCE": "internal"
+    },
+    "executable": "llama-server",
+    "host_port": 8080,
+    "kind": "native",
+    "model_entry": "<path-to-gguf>",
+    "network_mode": "localhost"
+  },
+  "metadata": {
+    "acceptance_status": "No accept_recipe.py run: that script promotes Docker launches only and this is a bare-metal launch. Status stays candidate until a containerized or native acceptance run exists.",
+    "alternatives_measured": "Same hardware and flags: IQ4_XS 128k 56.8 tok/s; IQ4_XS 64k 52.6; Q4_K_XL 64k q8_0 KV 51.3; Q5_K_S 64k 47.6; layer split 1:1 (IQ4_XS 64k q8_0) 33.2. MTP draft acceptance 0.75-0.95.",
+    "long_context_evidence": "recall_check.py: 3 trials at 104,941 prompt tokens. Greedy: 2/3 (one think-loop to the 4,096-token cap). Recommended sampling (temp 1.0, top-p 0.95, top-k 20): 3/3, no cap hits.",
+    "model_file_sha256": "3f227079003add2511437e5b1e94812e363385225bf6a9b47b0054a72bc8b01e",
+    "model_repository_revision": "4ca720788d1e01f1bff70c033e0d0028fd02e502",
+    "submitter": "jethrojones",
+    "thermals": "gpu-burn both cards 10 min: 0 errors; ASUS card max 74 C, EVGA card max 85 C (fans 91%), no thermal throttling.",
+    "tools_evidence": "zbench.py tool-call gate (get_weather with the correct city argument): pass."
+  },
+  "model_instance_id": "unsloth-qwen3-8-27b-gguf--ud-q4-k-xl",
+  "provenance": {
+    "captured_at": "2026-09-29T23:40:00Z",
+    "sources": [
+      {
+        "captured_at": "2026-09-29T23:40:00Z",
+        "commit": "b4a395bd05ee8c582e3318b7176081a70a7f95f4",
+        "kind": "submitter",
+        "repository": "https://github.com/jethrojones/local-ai-registry",
+        "url": "https://github.com/jethrojones/local-ai-registry/blob/b4a395bd05ee8c582e3318b7176081a70a7f95f4/data/sources/rtx3060x2-qwen38-27b/README.md"
+      },
+      {
+        "captured_at": "2026-09-29T23:40:00Z",
+        "commit": "b4a395bd05ee8c582e3318b7176081a70a7f95f4",
+        "kind": "submitter",
+        "repository": "https://github.com/jethrojones/local-ai-registry",
+        "url": "https://github.com/jethrojones/local-ai-registry/blob/b4a395bd05ee8c582e3318b7176081a70a7f95f4/data/sources/rtx3060x2-qwen38-27b/results/bench.md"
+      }
+    ]
+  },
+  "recipe_source": "submitter",
+  "recommended": false,
+  "schema_version": "local-ai-registry/v1",
+  "serving": {
+    "kv_cache_tokens": null,
+    "max_concurrency": 1,
+    "max_context_tokens": 131072,
+    "tensor_parallel": 2
+  },
+  "speed_sweep_ids": [
+    "qwen3-8-27b-ud-q4-k-xl-rtx-3060-12gb-llama-cpp-tp2-tensor-mtp-128k-sweep"
+  ],
+  "status": "candidate"
+}
